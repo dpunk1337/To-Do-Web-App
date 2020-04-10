@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+
+<body style="background-color:lightgreen;">
+
+
+  <script src="https://kit.fontawesome.com/37dca94f7f.js" crossorigin="anonymous"></script>
+  <div id="app">
+    <template>
+
+      <div class="container">
+        <div class="add-item">
+          <div class="add-icon" @click="addItem">
+            <i class="fas fa-plus"></i>
+          </div>
+          <form action="" @submit.prevent="addItem">
+            <input type="text" placeholder="Add a to-do..." v-model="entry">
+          </form>
+          <div class="feature-icon">
+            <i v-if="!entryFavorite" class="far fa-star" @click="entryFavorite = !entryFavorite"></i>
+            <i v-else class="fas fa-star" @click="entryFavorite = !entryFavorite"></i>
+          </div>
+        </div>
+        <div class="todo-list">
+          <div class="item" v-for="(item,index) in todoList" :key="index">
+            <div class="item-checkbox">
+              <i v-if="!item.complete" class="fas fa-square" @click="item.complete = !item.complete; resetPos(item)"></i>
+              <i v-else class="fas fa-check-square" @click="item.complete = !item.complete; resetPos(item)"></i>
+            </div>
+            <div class="item-title" :class="{ 'done': item.complete }">
+              {{ item.title }}
+            </div>
+            <div class="remove-icon" @click="mouseOver=!mouseOver; removeItem(item);">
+              <i v-if="mouseOver" class="fas fa-times"></i>
+              <i v-else class="fas fa-times"></i>
+            </div>
+            <div class="feature-icon-2">
+              <i v-if="!item.favorite && !item.complete" class="far fa-star" @click="item.favorite = !item.favorite; setPos(item);"></i>
+              <i v-else-if="item.favorite && !item.complete" class="fas fa-star" @click="item.favorite = !item.favorite"></i>
+              <i v-else class="far fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div v-if="todoList && todoList.length" class="other-options">
+          <div class="clear-all" @click="clearAll()">
+            Clear All
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+  <style lang="scss" scoped>
+    .container {
+      padding: 10px;
+      width: calc(100%-20px);
+      min-height: calc(100%-20px);
+    }
+
+    .add-item {
+      display: grid;
+      grid-template-columns: 70px auto 70px;
+      grid-template-rows: 60px;
+      width: 100%;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+      overflow: : hidden;
+    }
+
+    .add-icon {
+      grid-column-start: 1;
+      grid-column-end: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(255, 255, 255);
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    input {
+      grid-column-start: 2;
+      grid-column-end: 2;
+      background: none;
+      border: none;
+      width: 100%;
+      height: 60px;
+      color: rgb(255, 255, 255);
+      font-size: 1.6rem;
+    }
+
+    input::placeholder {
+      color: rgb(255, 255, 255);
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    .feature-icon {
+      grid-column-start: 3;
+      grid-column-end: 3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(255, 255, 255);
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .todo-list {
+      padding-top: 20px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 70px auto 70px 70px;
+      grid-template-rows: 60px;
+      width: 100%;
+      height: 60px;
+      margin-bottom: 2px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .item-checkbox {
+      grid-column-start: 1;
+      grid-column-end: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgba(0, 0, 0, 0.3);
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+
+    .item-title {
+      grid-column-start: 2;
+      grid-column-end: 2;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      font-size: 1.6rem;
+      font-family: Arial;
+    }
+
+    .remove-icon {
+      grid-column-start: 3;
+      grid-column-end: 3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(255,51,51);
+      font-size: 2rem;
+      cursor: pointer;
+
+    }
+
+    .feature-icon-2 {
+      grid-column-start: 4;
+      grid-column-end: 4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(51, 51, 51);
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .other-options {
+      display: grid;
+      padding-top: 20px;
+      grid-template-columns: 120px auto 120px;
+      grid-template-rows: 60px;
+      width: 100%;
+      height: 60px;
+      margin-bottom: 2px;
+      background: none;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .clear-all {
+      grid-column-start: 1;
+      grid-column-end: 1;
+      display: flex;
+      background: rgba(255, 255, 255, 0.8);
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      font-size: 1.6rem;
+      font-family: Arial;
+      cursor: pointer;
+    }
+
+    .done {
+      text-decoration: line-through;
+      text-decoration-color: red;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
