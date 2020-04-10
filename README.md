@@ -1,0 +1,2 @@
+# To-Do-Web-App
+This simple web app features:- 1. Adding and Removing to-dos. 2. Make some to-dos important, which takes them to the top of the list. 3. Completion checkbox, so that user can easily track the to-do's left for them to do. 4. User can also mark to-do's important before adding them to the list. 5. User can remove all the items from list by clicking on 'Clear All' button.  Please make sure you are connected to internet for the icons to load up.
